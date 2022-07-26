@@ -101,6 +101,11 @@ class MagicLink(models.Model):
         if settings.EMAIL_IGNORE_CASE and email:
             email = email.lower()
 
+        if settings.EMAIL_DOMAIN is not None and email:
+            if not email.endswith(settings.EMAIL_DOMAIN):
+                raise MagicLinkError(
+                    'Email address is not from the correct domain')
+
         if settings.VERIFY_INCLUDE_EMAIL and self.email != email:
             raise MagicLinkError('Email address does not match')
 
